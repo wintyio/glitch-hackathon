@@ -9,6 +9,7 @@ import { RoomPage } from './RoomPage';
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { TITLE, theme } from "../constants";
+import { Dialog } from "./Dialog";
 
 function rand(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -53,7 +54,7 @@ const rankString = ["1st", "2nd", "3rd", "4th", "5th", "6th"];
 
 export function GamePage({ isSignedIn, contractId, wallet }) {
     const navigate = useNavigate();
-    const [gameState, setGameState] = useState("Wait");
+    const [gameState, setGameState] = useState("Wasit");
     const [roomId, setRoomId] = useState();
 
     const time = useSelector(selectTime);
@@ -61,7 +62,7 @@ export function GamePage({ isSignedIn, contractId, wallet }) {
     useEffect(() => {
         // if (!isSignedIn) return navigate("/");
 
-        window.gWebSocket = new WebSocket("ws://3.39.230.181:8787/start");
+        window.gWebSocket = new WebSocket("wss://3.39.230.181:8787/start");
         // 2. 웹소켓 이벤트 처리
         // 2-1) 연결 이벤트 처리
         window.gWebSocket.onopen = () => {
@@ -76,6 +77,14 @@ export function GamePage({ isSignedIn, contractId, wallet }) {
             let type = data.type;
             let points = {};
             switch (type) {
+                case "LOSE":
+                    setGameState("Lose");
+                    break;
+
+                case "WIN":
+                    setGameState("Win");
+                    break;
+
                 case "TIME":
                     dispatch(updateTime(data.time));
                     break;
@@ -130,7 +139,18 @@ export function GamePage({ isSignedIn, contractId, wallet }) {
 
     if (gameState === "Wait") return <RoomPage />;
 
+    const onClickWinButton = () => {
+        navigate("/");
+    }
+    const onClickLoseButton = () => {
+        navigate("/");
+    }
+
     return <div>
+        {gameState === "Win" && <Dialog title={"Congratulation!"} description={<span><span style={{ color: theme.color.primary }}>{wallet.accountId}</span> is the winner :-)</span>} buttonMsg={"Okay"} onClickButton={onClickWinButton} />}
+        {gameState === "Lose" && <Dialog title={"Lose!"} description={"You lose :-("} buttonMsg={"Okay"} onClickButton={onClickLoseButton} />}
+
+        {time > 60 && <Dialog title={"Match found"} description={<div style={{ marginTop: 50, color: theme.color.primary, fontSize: 96, fontWeight: "bold" }}>{time - 60}</div>} />}
 
         <CardBoard row={4} col={8} />
 
@@ -138,7 +158,7 @@ export function GamePage({ isSignedIn, contractId, wallet }) {
 
         <TopContainer>
             <TimerContainer>
-                <theme.style.SubTitle>{Math.max(time, 0)}</theme.style.SubTitle>
+                <theme.style.SubTitle>{Math.max(Math.min(60, time), 0)}</theme.style.SubTitle>
             </TimerContainer>
         </TopContainer>
 

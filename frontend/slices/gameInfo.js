@@ -10,7 +10,7 @@ const initialState = {
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
     ],
     points: [],
-    time: 60
+    time: 63
 }
 
 export const gameInfo = createSlice({

@@ -10,6 +10,7 @@ const Background = styled.div`
     height: calc(var(--vh, 1vh) * 100);
     padding: 20px;
     background-color: rgba(0, 0, 0, 0.3);
+    z-index: 99999999;
 `;
 
 const Container = styled.div`
@@ -35,7 +36,7 @@ export function Dialog({ title, description, imgSrc, onClickButton, buttonMsg })
     return <Background>
         <Container>
             <theme.style.Title>{title}</theme.style.Title>
-            <Image src={imgSrc} />
+            {imgSrc && <Image src={imgSrc} />}
             <div style={{ marginBottom: 28 }}>{description}</div>
             {buttonMsg && <theme.style.DefaultButton onClick={onClickButton}>{buttonMsg}</theme.style.DefaultButton>}
         </Container>
