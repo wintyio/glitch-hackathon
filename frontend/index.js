@@ -5,6 +5,8 @@ import App from './App';
 // NEAR
 import { Wallet } from './near-wallet';
 import { CONTRACT_ADDRESS } from './constants';
+import { Provider } from 'react-redux';
+import store from './store/store';
 
 // When creating the wallet you can optionally ask to create an access key
 // Having the key enables to call non-payable methods without interrupting the user to sign
@@ -17,6 +19,8 @@ window.onload = async () => {
   const isSignedIn = await wallet.startUp()
 
   root.render(
-    <App isSignedIn={isSignedIn} contractId={CONTRACT_ADDRESS} wallet={wallet} />
+    <Provider store={store}>
+      <App isSignedIn={isSignedIn} contractId={CONTRACT_ADDRESS} wallet={wallet} />
+    </Provider>
   );
 }

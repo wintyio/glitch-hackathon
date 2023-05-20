@@ -43,9 +43,11 @@
     "@near-wallet-selector/nightly-connect": "^7.8.0",
     "@near-wallet-selector/sender": "^7.8.0",
     "@near-wallet-selector/wallet-connect": "^7.8.0",
+    "@reduxjs/toolkit": "^1.9.5",
     "near-api-js": "^1.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-redux": "^8.0.5",
     "regenerator-runtime": "^0.13.11",
     "ws": "^8.13.0"
   },
