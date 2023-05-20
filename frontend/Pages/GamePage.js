@@ -83,10 +83,12 @@ export function GamePage({ isSignedIn, contractId, wallet }) {
             switch (type) {
                 case "LOSE":
                     setGameState("Lose");
+                    dispatch(updateTime(0));
                     break;
 
                 case "WIN":
                     setGameState("Win");
+                    dispatch(updateTime(0));
                     break;
 
                 case "TIME":

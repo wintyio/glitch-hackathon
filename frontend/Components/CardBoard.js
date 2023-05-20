@@ -244,7 +244,7 @@ const CustomNodeFlow = () => {
             nodeTypes={nodeTypes}
             snapToGrid={true}
             defaultViewport={defaultViewport}
-            // elementsSelectable
+            elementsSelectable
             zoomOnScroll
             // panOnScroll
             // panOnScrollMode="free"

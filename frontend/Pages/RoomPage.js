@@ -3,6 +3,19 @@ import { theme } from "../constants";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectPoints } from "../slices/gameInfo";
+import { useEffect, useState } from "react";
+
+var toHHMMSS = (secs) => {
+    var sec_num = parseInt(secs, 10)
+    var hours = Math.floor(sec_num / 3600)
+    var minutes = Math.floor(sec_num / 60) % 60
+    var seconds = sec_num % 60
+
+    return [hours, minutes, seconds]
+        .map(v => v < 10 ? "0" + v : v)
+        .filter((v, i) => v !== "00" || i > 0)
+        .join(":")
+}
 
 const PlayerListContainer = styled.div`
     display: flex;
@@ -46,18 +59,28 @@ export function RoomPage(props) {
 
     const points = useSelector(selectPoints);
 
+    const [timer, setTimer] = useState(0);
+
     const onClickCancelButton = () => {
         let confirm = window.confirm("You can't get your Nears back.\nWould you like to leave?");
         if (!confirm) return;
         navigate("/");
     }
 
+    const updateTimer = () => {
+        setTimer(timer => timer + 1);
+    }
+
+    useEffect(() => {
+        setInterval(() => { updateTimer() }, 1000);
+    }, [])
+
     return <div style={{ height: "calc(var(--vh, 1vh) * 100)", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
         <theme.style.Title style={{ marginBottom: 20 }}>Matching Games</theme.style.Title>
 
         <theme.style.SubTitle>
-            {/* <span style={{ marginRight: 20 }}>00:48</span> */}
-            <span>{Object.keys(points).length !== 0 ? Object.keys(points).length : "0"} / 6</span>
+            <span style={{ marginRight: 20 }}>{toHHMMSS(timer)}</span>
+            <span><span style={{ color: theme.color.primary }}>{Object.keys(points).length !== 0 ? Object.keys(points).length : "0"}</span> / 6</span>
         </theme.style.SubTitle>
 
         <PlayerListContainer>
