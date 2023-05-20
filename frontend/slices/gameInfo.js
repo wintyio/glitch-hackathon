@@ -32,7 +32,7 @@ export const gameInfo = createSlice({
         },
         updatePoints(state, action) {
             if (!action.payload) return;
-            points = action.payload;
+            let points = action.payload;
             let sNames = Object.keys(points).sort((a, b) => points[b] - points[a]);
             let newPoints = {};
             for (let n of sNames)
