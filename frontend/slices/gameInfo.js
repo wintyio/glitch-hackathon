@@ -1,7 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    playerInfo: []
+    playerInfo: [],
+    map: [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    ],
 }
 
 export const gameInfo = createSlice({
@@ -17,8 +24,13 @@ export const gameInfo = createSlice({
 
             state.playerInfo = filteredArray;
         },
+        updateMap(state, action) {
+            state.map = action.payload;
+            console.log("Update Map");
+        }
     }
 })
 
-export const { addPlayerInfo } = gameInfo.actions
+export const { addPlayerInfo, updateMap } = gameInfo.actions
 export const selectPlayerInfo = (state) => state.gameInfo.playerInfo
+export const selectMap = (state) => state.gameInfo.map

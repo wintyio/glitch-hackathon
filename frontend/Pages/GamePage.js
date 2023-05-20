@@ -1,21 +1,27 @@
 import { Card } from "../Components/Card";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addPlayerInfo, selectPlayerInfo } from "../slices/gameInfo";
+import { addPlayerInfo, selectPlayerInfo, updateMap } from "../slices/gameInfo";
 import { PlayerInfo } from "../classes/PlayerInfo";
 import { PlayerInfoUI } from "../Components/PlayerInfoUI";
 import { CardBoard } from "../Components/CardBoard";
+import { RoomPage } from './RoomPage';
 
 function rand(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+window.gWebSocket = null;
+window.gRoomId = null;
+
 export function GamePage({ isSignedIn, contractId, wallet }) {
+    const [gameState, setGameState] = useState("Wait");
+    const [roomId, setRoomId] = useState();
+
     const webSocket = new WebSocket("ws://3.39.230.181:8787/start");
+    window.gWebSocket = webSocket;
 
     useEffect(() => {
-
-
         // 2. 웹소켓 이벤트 처리
         // 2-1) 연결 이벤트 처리
         webSocket.onopen = () => {
@@ -26,6 +32,23 @@ export function GamePage({ isSignedIn, contractId, wallet }) {
 
         // 2-2) 메세지 수신 이벤트 처리
         webSocket.onmessage = function (event) {
+            let data = JSON.parse(event.data);
+            let type = data.type;
+            console.log(type);
+            switch (type) {
+                case "START":
+                    let roomId = data.roomId;
+                    setGameState("Start");
+                    setRoomId(roomId);
+                    window.gRoomId = roomId;
+                    break;
+
+                case "MAP":
+                    dispatch(updateMap(data.map));
+                default:
+                    break;
+            }
+
             console.log(`서버 웹소켓에게 받은 데이터: ${event.data}`);
         }
 
@@ -76,7 +99,10 @@ export function GamePage({ isSignedIn, contractId, wallet }) {
     const playerInfo = useSelector(selectPlayerInfo);
     const dispatch = useDispatch();
 
+    if (gameState === "Wait") return <RoomPage />;
+
     return <div>
+
         <CardBoard row={4} col={8} />
 
         <SignButton />

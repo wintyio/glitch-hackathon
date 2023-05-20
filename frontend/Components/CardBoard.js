@@ -11,6 +11,8 @@ import React, { useEffect } from 'react'
 import { useSpring, animated } from '@react-spring/web'
 import { createUseGesture, dragAction, pinchAction } from '@use-gesture/react'
 import { ReactFlow, useEdgesState, useNodesState } from "reactflow";
+import { useSelector } from "react-redux";
+import { selectMap } from "../slices/gameInfo";
 
 
 // const useGesture = createUseGesture([dragAction, pinchAction])
@@ -233,30 +235,31 @@ export function CardBoard(props) {
 const CustomNodeFlow = () => {
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
 
+    const map = useSelector(selectMap);
+
     useEffect(() => {
         const _nodes = [];
 
-        [...Array(5).keys()].map(y => {
-            console.log(y);
-            [...Array(10).keys()].map(x => {
+        [...Array(5).keys()].map(r => {
+            console.log(r);
+            [...Array(10).keys()].map(c => {
                 _nodes.push({
-                    id: `${x * 10 + y}`,
+                    id: `${c * 10 + r}`,
                     type: 'card',
-                    data: { label: 'An input node' },
-                    position: { x: x * 140, y: y * 160 },
+                    data: { c: c, r: r },
+                    position: { x: c * 140, y: r * 160 },
                     sourcePosition: 'left',
                 })
             })
         })
 
         setNodes(_nodes);
-
         // setNodes([
         //     {
         //         id: '1',
         //         type: 'input',
         //         data: { label: 'An input node' },
-        //         position: { x: 0, y: 50 },
+        //         position: { c: 0, y: 50 },
         //         sourcePosition: 'right',
         //     },
         //     {
@@ -283,6 +286,23 @@ const CustomNodeFlow = () => {
 
     }, []);
 
+    // nodes.map(n => {
+    //     n.id === 
+    // })
+
+    useEffect(() => {
+        setNodes((nds) =>
+            nds.map((node) => {
+                node.data = {
+                    ...node.data,
+                    flip: map[node.data.r][node.data.c] !== 0,
+                };
+
+                return node;
+            })
+        );
+    }, [map]);
+
     return (
         <ReactFlow
             nodes={nodes}
@@ -294,6 +314,7 @@ const CustomNodeFlow = () => {
             // panOnScroll
             // panOnScrollMode="free"
             // panOnDrag
+            zoomOnDoubleClick={false}
             fitView
         >
 

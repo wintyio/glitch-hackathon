@@ -76,16 +76,16 @@ const CardLevel = styled.div`
 `;
 
 
-export function Card() {
+export function Card({ data, isConnectable }) {
     const [flip, setFlip] = useState(false);
 
     const onClick = () => {
         if (flip) return;
-
-        setFlip(true);
+        let sendData = { roomId: gRoomId, type: "OPEN", c: data.c, r: data.r }
+        window.gWebSocket.send(JSON.stringify(sendData));
     }
 
-    return <CardContainer className={flip ? "flip" : ""} onClick={onClick} onDrag={e => e.preventDefault()}>
+    return <CardContainer className={data.flip ? "flip" : ""} onClick={onClick} onDrag={e => e.preventDefault()}>
         <CardInner>
             <CardFront>
                 <CardFrontImg />
