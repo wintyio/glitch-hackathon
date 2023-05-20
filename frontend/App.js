@@ -8,6 +8,8 @@ import { EducationalText, SignInPrompt, SignOutButton } from './ui-components';
 import { Contract } from './near-interface';
 import { CONTRACT_ADDRESS } from './constants';
 
+import { MainPage } from './Pages/MainPage';
+
 export default function App({ isSignedIn, contractId, wallet }) {
   const [valueFromBlockchain, setValueFromBlockchain] = React.useState();
 
@@ -16,6 +18,7 @@ export default function App({ isSignedIn, contractId, wallet }) {
   const contract = new Contract({ contractId: CONTRACT_ADDRESS, walletToUse: wallet });
 
   // Get blockchian state once on component load
+  /*
   React.useEffect(() => {
     getGreeting()
       .then(setValueFromBlockchain)
@@ -25,12 +28,7 @@ export default function App({ isSignedIn, contractId, wallet }) {
       });
   }
     , []);
-
-  /// If user not signed-in with wallet - show prompt
-  if (!isSignedIn) {
-    // Sign-in flow will reload the page later
-    return <SignInPrompt greeting={valueFromBlockchain} onClick={() => wallet.signIn()} />;
-  }
+    */
 
   function changeGreeting(e) {
     e.preventDefault();
@@ -48,34 +46,16 @@ export default function App({ isSignedIn, contractId, wallet }) {
     //   });
   }
 
+  /*
   function getGreeting() {
     // use the wallet to query the contract's greeting
     return wallet.viewMethod({ method: 'get_greeting', contractId })
   }
+  */
 
   return (
-    <>
-      <SignOutButton accountId={wallet.accountId} onClick={() => wallet.signOut()} />
-      <main className={uiPleaseWait ? 'please-wait' : ''}>
-        <h1>
-          The contract says: <span className="greeting">{valueFromBlockchain}</span>
-        </h1>
-        <form onSubmit={changeGreeting} className="change">
-          <label>Change greeting:</label>
-          <div>
-            <input
-              autoComplete="off"
-              defaultValue={valueFromBlockchain}
-              id="greetingInput"
-            />
-            <button>
-              <span>Save</span>
-              <div className="loader"></div>
-            </button>
-          </div>
-        </form>
-        <EducationalText />
-      </main>
-    </>
+    <div>
+      <MainPage isSignedIn={isSignedIn} contractId={contractId} wallet={wallet} />
+    </div>
   );
 }
