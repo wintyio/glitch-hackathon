@@ -27,7 +27,6 @@ export function MainPage({ isSignedIn, contractId, wallet, contract }) {
 
     useEffect(() => {
         if (localStorage.getItem("goGame") === "true") {
-            localStorage.setItem("goGame", "false");
             return navigate("/game");
         }
 

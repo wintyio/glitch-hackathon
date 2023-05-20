@@ -59,6 +59,11 @@ export function GamePage({ isSignedIn, contractId, wallet }) {
     const time = useSelector(selectTime);
 
     useEffect(() => {
+        if (localStorage.getItem("goGame") !== "true") {
+            location.href = "/";
+        }
+        else
+            localStorage.setItem("goGame", "false");
         // if (!isSignedIn) return navigate("/");
 
         window.gWebSocket = new WebSocket("wss://pseong.com/start");
@@ -149,7 +154,7 @@ export function GamePage({ isSignedIn, contractId, wallet }) {
         {gameState === "Win" && <Dialog title={"Congratulation!"} imgSrc={winImg} description={<span><span style={{ color: theme.color.primary }}>{wallet.accountId}</span> is the winner :-)</span>} buttonMsg={"Okay"} onClickButton={onClickWinButton} />}
         {gameState === "Lose" && <Dialog title={"Lose!"} imgSrc={loseImg} description={"You lose :-("} buttonMsg={"Okay"} onClickButton={onClickLoseButton} />}
 
-        {/* {time > 60 && <Dialog title={"Match found"} description={<div style={{ marginTop: 50, color: theme.color.primary, fontSize: 96, fontWeight: "bold" }}>{time - 60}</div>} />} */}
+        {time > 60 && <Dialog title={"Match found"} description={<div style={{ marginTop: 50, color: theme.color.primary, fontSize: 96, fontWeight: "bold" }}>{time - 60}</div>} />}
 
         <CardBoard row={4} col={8} />
 
