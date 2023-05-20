@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const CONTRACT_ADDRESS = 'glitch-hackathon-project.winty.testnet';
+export const CONTRACT_ADDRESS = 'glitch-hackathon-project.winty2.testnet';
 export const TITLE = 'Flip Dash';
 
 const color = {

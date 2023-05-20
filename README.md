@@ -53,14 +53,14 @@ Each account on NEAR can have at most one contract deployed to it. If you've alr
 
 2. Create a subaccount (replace `YOUR-NAME` below with your actual account name):
 
-   near create-account near-blank-project.YOUR-NAME.testnet --masterAccount YOUR-NAME.testnet
+npx near create-account glitch-hackathon-project.winty2.testnet --masterAccount winty2.testnet
 
 ## Step 2: deploy the contract
 
 Use the CLI to deploy the contract to TestNet with your account ID.
 Replace `PATH_TO_WASM_FILE` with the `wasm` that was generated in `contract` build directory.
 
-    npx near deploy --accountId glitch-hackathon-project.winty.testnet --wasmFile ./contract/build/hello_near.wasm
+    npx near deploy --accountId glitch-hackathon-project.winty2.testnet --wasmFile ./contract/build/hello_near.wasm
 
 ## Step 3: set contract name in your frontend code
 

@@ -30,6 +30,10 @@ body {
   position: absolute;
 }
 
+.close-button {
+  display: none !important;
+}
+
 #near-wallet-selector-modal {
   --backdrop-bg: #26262630;
   --heading-color: #222;
