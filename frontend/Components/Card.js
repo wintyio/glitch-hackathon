@@ -38,6 +38,7 @@ const CardSide = styled.div`
     align-items: center;
     width: 100%;
     height: 100%;
+    border: 4px solid #FFFFFF;
     border-radius: 10px;
     box-shadow: 0px 4px 20px 5px rgba(0, 0, 0, 0.05);
     -webkit-backface-visibility: hidden; /* Safari */
@@ -45,12 +46,12 @@ const CardSide = styled.div`
 `;
 
 const CardBack = styled(CardSide)`
-    background-color: #bbb;
+    background: linear-gradient(28.22deg, rgba(241, 103, 120, 0.2) 10.48%, rgba(247, 167, 177, 0.2) 42.21%, rgba(250, 200, 206, 0.2) 74.1%, rgba(254, 237, 239, 0.2) 97.74%);
     color: black;
 `;
 
 const CardFront = styled(CardSide)`
-    background-color: white;
+    background: #FDF8F8;
     color: white;
     transform: rotateY(180deg);
 `;
@@ -80,7 +81,6 @@ export function Card({ data, isConnectable }) {
     const [flip, setFlip] = useState(false);
 
     const onClick = () => {
-        console.log("asad");
         if (flip) return;
         let sendData = { roomId: gRoomId, type: "OPEN", c: data.c, r: data.r, accountId: window.gAccountId }
         window.gWebSocket.send(JSON.stringify(sendData));

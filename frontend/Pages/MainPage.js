@@ -5,13 +5,12 @@ import { useNavigate } from "react-router-dom";
 
 export function MainPage({ isSignedIn, contractId, wallet }) {
     const navigate = useNavigate();
-
     const signIn = () => {
         isSignedIn ? wallet.signOut() : wallet.signIn();
     }
 
     const onClickPlayButton = () => {
-        navigate("/room");
+        navigate("/game");
     }
 
     return <div>

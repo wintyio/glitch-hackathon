@@ -57,24 +57,26 @@ export function RoomPage(props) {
 
         <theme.style.SubTitle>
             <span style={{ marginRight: 20 }}>00:48</span>
-            <span>4 / 6</span>
+            <span>{Object.keys(points).length !== 0 ? Object.keys(points).length : "0"} / 2</span>
         </theme.style.SubTitle>
 
         <PlayerListContainer>
-            {Object.keys(points).map(v => {
-                <PlayerContainer>
-                    <PlayerStateCircle active />
-                    <PlayerName>{v}</PlayerName>
-                </PlayerContainer>
-            })}
+            {console.log(Object.keys(points))}
+            {
+                Object.keys(points).map(v =>
+                    <PlayerContainer>
+                        <PlayerStateCircle active />
+                        <PlayerName>{v}</PlayerName>
+                    </PlayerContainer>)
+            }
 
             {Object.keys(points).length < 6
-                && [...Array(6 - Object.keys(points).length)].map(v => {
+                && [...Array(6 - Object.keys(points).length)].map(v =>
                     <PlayerContainer>
                         <PlayerStateCircle />
                         <PlayerName>wating...</PlayerName>
-                    </PlayerContainer>
-                })}
+                    </PlayerContainer>)
+            }
         </PlayerListContainer>
 
         <theme.style.DefaultButton onClick={onClickCancelButton}>Leave</theme.style.DefaultButton>

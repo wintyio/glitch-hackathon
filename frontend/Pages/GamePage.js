@@ -1,11 +1,14 @@
 import { Card } from "../Components/Card";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addPlayerInfo, selectPlayerInfo, selectPoints, updateMap, updatePoints } from "../slices/gameInfo";
+import { addPlayerInfo, selectPlayerInfo, selectPoints, selectTime, updateMap, updatePoints, updateTime } from "../slices/gameInfo";
 import { PlayerInfo } from "../classes/PlayerInfo";
 import { PlayerInfoUI } from "../Components/PlayerInfoUI";
 import { CardBoard } from "../Components/CardBoard";
 import { RoomPage } from './RoomPage';
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { TITLE, theme } from "../constants";
 
 function rand(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -14,18 +17,56 @@ function rand(min, max) {
 // window.gWebSocket = null;
 window.gRoomId = null;
 
+const PlayerInfoListContainer = styled.div`
+    position: absolute;
+    top: 32px;
+    right: 48px;
+    display: inline-flex;
+    row-gap: 12px;
+    flex-direction: column;
+    justify-content: right;
+    z-index: 1000;
+`;
+
+const TopContainer = styled.div`
+    position: absolute;
+    top: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+`;
+
+const TimerContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 124px;
+    height: 73px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 20px;
+`;
+
+const Ranking = styled.div`
+    
+`;
+
+const rankString = ["1st", "2nd", "3rd", "4th", "5th", "6th"];
+
 export function GamePage({ isSignedIn, contractId, wallet }) {
+    const navigate = useNavigate();
     const [gameState, setGameState] = useState("Wait");
     const [roomId, setRoomId] = useState();
 
-    useEffect(() => {
-        window.gWebSocket = new WebSocket("ws://3.39.230.181:8787/start");
+    const time = useSelector(selectTime);
 
+    useEffect(() => {
+        // if (!isSignedIn) return navigate("/");
+
+        window.gWebSocket = new WebSocket("ws://3.39.230.181:8787/start");
         // 2. 웹소켓 이벤트 처리
         // 2-1) 연결 이벤트 처리
         window.gWebSocket.onopen = () => {
             console.log("웹소켓서버와 연결 성공");
-            let data = { type: "ENTER", accountId: wallet.accountId };
+            let data = { type: "ENTER", accountId: wallet.accountId ? wallet.accountId : "asdf" };
             window.gWebSocket.send(JSON.stringify(data));
         };
 
@@ -35,6 +76,10 @@ export function GamePage({ isSignedIn, contractId, wallet }) {
             let type = data.type;
             let points = {};
             switch (type) {
+                case "TIME":
+                    dispatch(updateTime(data.time));
+                    break;
+
                 case "READY":
                     points = {};
                     data.names.map(v => { points[`${v}`] = 0; });
@@ -77,40 +122,7 @@ export function GamePage({ isSignedIn, contractId, wallet }) {
         window.gWebSocket.onerror = function (event) {
             console.log(event)
         }
-
-        // 3. 버튼 클릭 이벤트 처리
-        // 3-1) 웹소켓 서버에게 메세지 보내기
-        let count = 1;
-        /*
-        document.getElementById("btn_send").onclick = function () {
-
-            if (window.gWebSocket.readyState === webSocket.OPEN) { // 연결 상태 확인
-                webSocket.send(`증가하는 숫자를 보냅니다 => ${count}`); // 웹소켓 서버에게 메시지 전송
-                count++; // 보낼때마다 숫자를 1씩 증가
-
-            } else {
-                alert("연결된 웹소켓 서버가 없습니다.");
-            }
-        }
-
-        // 3-2) 웹소켓 서버와 연결 끊기
-        document.getElementById("btn_close").onclick = function () {
-
-            if (webSocket.readyState === webSocket.OPEN) { // 연결 상태 확인
-                webSocket.close(); // 연결 종료
-
-            } else {
-                alert("연결된 웹소켓 서버가 없습니다.");
-            }
-        }*/
     }, []);
-
-    const SignButton = () => {
-        if (isSignedIn)
-            return <button onClick={() => wallet.signOut()}>로그아웃</button>
-        else
-            return <button onClick={() => wallet.signIn()}>로그인</button>
-    }
 
     const playerInfo = useSelector(selectPlayerInfo);
     const dispatch = useDispatch();
@@ -122,15 +134,20 @@ export function GamePage({ isSignedIn, contractId, wallet }) {
 
         <CardBoard row={4} col={8} />
 
-        <SignButton />
+        <theme.style.SubTitle style={{ position: "absolute", top: 32, left: 48 }}>{TITLE}</theme.style.SubTitle>
 
-        <button onClick={() => {
-            let player = new PlayerInfo(rand(0, 100000));
-            dispatch(addPlayerInfo(player.toJson()));
-        }}>플레이어 추가</button>
+        <TopContainer>
+            <TimerContainer>
+                <theme.style.SubTitle>{Math.max(time, 0)}</theme.style.SubTitle>
+            </TimerContainer>
+        </TopContainer>
 
-        <div>
-            {Object.keys(points).map(k => <PlayerInfoUI accountId={k} point={points[k]} />)}
-        </div>
+        <PlayerInfoListContainer>
+            {Object.keys(points).map((k, i) => k === wallet.accountId
+                && <theme.style.Title style={{ textAlign: "right", marginBottom: 32, color: theme.color.primary }}>
+                    {rankString[i]}
+                </theme.style.Title>)}
+            {Object.keys(points).map(k => <PlayerInfoUI accountId={k} point={points[k]} isMe={k === wallet.accountId} />)}
+        </PlayerInfoListContainer>
     </div>;
 }

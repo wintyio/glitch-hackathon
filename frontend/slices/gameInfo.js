@@ -9,7 +9,8 @@ const initialState = {
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
     ],
-    points: []
+    points: [],
+    time: 60
 }
 
 export const gameInfo = createSlice({
@@ -32,11 +33,15 @@ export const gameInfo = createSlice({
         updatePoints(state, action) {
             if (!action.payload) return;
             state.points = action.payload;
+        },
+        updateTime(state, action) {
+            state.time = action.payload;
         }
     }
 })
 
-export const { addPlayerInfo, updateMap, updatePoints } = gameInfo.actions
+export const { addPlayerInfo, updateMap, updatePoints, updateTime } = gameInfo.actions
 export const selectPlayerInfo = (state) => state.gameInfo.playerInfo
 export const selectMap = (state) => state.gameInfo.map
 export const selectPoints = (state) => state.gameInfo.points
+export const selectTime = (state) => state.gameInfo.time

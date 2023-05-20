@@ -73,7 +73,6 @@ export default function App({ isSignedIn, contractId, wallet }) {
       <HashRouter>
         <Routes>
           <Route exact path='/' element={<MainPage isSignedIn={isSignedIn} contractId={contractId} wallet={wallet} />} />
-          <Route path='/room' element={<RoomPage isSignedIn={isSignedIn} contractId={contractId} wallet={wallet} />} />
           <Route path='/game' element={<GamePage isSignedIn={isSignedIn} contractId={contractId} wallet={wallet} />} />
         </Routes>
         {/* {!isSignedIn && <LoginPage />} */}
