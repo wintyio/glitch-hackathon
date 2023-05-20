@@ -1,5 +1,5 @@
 import 'regenerator-runtime/runtime';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import './assets/global.css';
 
@@ -16,6 +16,16 @@ export default function App({ isSignedIn, contractId, wallet }) {
   const [uiPleaseWait, setUiPleaseWait] = React.useState(true);
 
   const contract = new Contract({ contractId: CONTRACT_ADDRESS, walletToUse: wallet });
+
+  function setScreenSize() {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty("--vh", `${vh}px`);
+  }
+
+  useEffect(() => {
+    setScreenSize();
+    window.addEventListener('resize', () => setScreenSize());
+  });
 
   // Get blockchian state once on component load
   /*
