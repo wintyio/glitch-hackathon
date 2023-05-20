@@ -56,8 +56,8 @@ export function RoomPage(props) {
         <theme.style.Title style={{ marginBottom: 20 }}>Matching Games</theme.style.Title>
 
         <theme.style.SubTitle>
-            <span style={{ marginRight: 20 }}>00:48</span>
-            <span>{Object.keys(points).length !== 0 ? Object.keys(points).length : "0"} / 2</span>
+            {/* <span style={{ marginRight: 20 }}>00:48</span> */}
+            <span>{Object.keys(points).length !== 0 ? Object.keys(points).length : "0"} / 6</span>
         </theme.style.SubTitle>
 
         <PlayerListContainer>

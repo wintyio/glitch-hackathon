@@ -158,7 +158,7 @@ export function GamePage({ isSignedIn, contractId, wallet }) {
 
         <CardBoard row={4} col={8} />
 
-        <theme.style.SubTitle style={{ position: "absolute", top: 32, left: 48 }}>{TITLE}</theme.style.SubTitle>
+        <theme.style.SubTitle style={{ fontFamily: "Zen Dots", position: "absolute", top: 32, left: 48 }}>{TITLE}</theme.style.SubTitle>
 
         <TopContainer>
             <TimerContainer>
