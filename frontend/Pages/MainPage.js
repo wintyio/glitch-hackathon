@@ -2,14 +2,16 @@ import { useEffect, useRef } from "react";
 import { theme } from "../constants"
 import { Dialog } from "./Dialog";
 import { useNavigate } from "react-router-dom";
+import { async } from "regenerator-runtime";
 
-export function MainPage({ isSignedIn, contractId, wallet }) {
+export function MainPage({ isSignedIn, contractId, wallet, contract }) {
     const navigate = useNavigate();
     const signIn = () => {
         isSignedIn ? wallet.signOut() : wallet.signIn();
     }
 
-    const onClickPlayButton = () => {
+    const onClickPlayButton = async () => {
+        // await contract.donate(1);
         navigate("/game");
     }
 

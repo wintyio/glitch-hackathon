@@ -50,8 +50,6 @@ export default function App({ isSignedIn, contractId, wallet }) {
     setUiPleaseWait(true);
     const { greetingInput } = e.target.elements;
 
-    contract.donate(1);
-
     // use the wallet to send the greeting to the contract
     // wallet.callMethod({ method: 'set_greeting', args: { message: greetingInput.value }, contractId })
     //   .then(async () => { return getGreeting(); })
@@ -72,7 +70,7 @@ export default function App({ isSignedIn, contractId, wallet }) {
     <div>
       <HashRouter>
         <Routes>
-          <Route exact path='/' element={<MainPage isSignedIn={isSignedIn} contractId={contractId} wallet={wallet} />} />
+          <Route exact path='/' element={<MainPage isSignedIn={isSignedIn} contractId={contractId} wallet={wallet} contract={contract} />} />
           <Route path='/game' element={<GamePage isSignedIn={isSignedIn} contractId={contractId} wallet={wallet} />} />
         </Routes>
         {/* {!isSignedIn && <LoginPage />} */}

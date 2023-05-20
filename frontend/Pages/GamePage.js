@@ -11,6 +11,9 @@ import styled from "styled-components";
 import { TITLE, theme } from "../constants";
 import { Dialog } from "./Dialog";
 
+import winImg from "../img/win.png"
+import loseImg from "../img/lose.png"
+
 function rand(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -46,15 +49,11 @@ const TimerContainer = styled.div`
     border-radius: 20px;
 `;
 
-const Ranking = styled.div`
-    
-`;
-
 const rankString = ["1st", "2nd", "3rd", "4th", "5th", "6th"];
 
 export function GamePage({ isSignedIn, contractId, wallet }) {
     const navigate = useNavigate();
-    const [gameState, setGameState] = useState("Wasit");
+    const [gameState, setGameState] = useState("Wait");
     const [roomId, setRoomId] = useState();
 
     const time = useSelector(selectTime);
@@ -62,7 +61,7 @@ export function GamePage({ isSignedIn, contractId, wallet }) {
     useEffect(() => {
         // if (!isSignedIn) return navigate("/");
 
-        window.gWebSocket = new WebSocket("wss://3.39.230.181:8787/start");
+        window.gWebSocket = new WebSocket("wss://pseong.com/start");
         // 2. 웹소켓 이벤트 처리
         // 2-1) 연결 이벤트 처리
         window.gWebSocket.onopen = () => {
@@ -147,10 +146,10 @@ export function GamePage({ isSignedIn, contractId, wallet }) {
     }
 
     return <div>
-        {gameState === "Win" && <Dialog title={"Congratulation!"} description={<span><span style={{ color: theme.color.primary }}>{wallet.accountId}</span> is the winner :-)</span>} buttonMsg={"Okay"} onClickButton={onClickWinButton} />}
-        {gameState === "Lose" && <Dialog title={"Lose!"} description={"You lose :-("} buttonMsg={"Okay"} onClickButton={onClickLoseButton} />}
+        {gameState === "Win" && <Dialog title={"Congratulation!"} imgSrc={winImg} description={<span><span style={{ color: theme.color.primary }}>{wallet.accountId}</span> is the winner :-)</span>} buttonMsg={"Okay"} onClickButton={onClickWinButton} />}
+        {gameState === "Lose" && <Dialog title={"Lose!"} imgSrc={loseImg} description={"You lose :-("} buttonMsg={"Okay"} onClickButton={onClickLoseButton} />}
 
-        {time > 60 && <Dialog title={"Match found"} description={<div style={{ marginTop: 50, color: theme.color.primary, fontSize: 96, fontWeight: "bold" }}>{time - 60}</div>} />}
+        {/* {time > 60 && <Dialog title={"Match found"} description={<div style={{ marginTop: 50, color: theme.color.primary, fontSize: 96, fontWeight: "bold" }}>{time - 60}</div>} />} */}
 
         <CardBoard row={4} col={8} />
 

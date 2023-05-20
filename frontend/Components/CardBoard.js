@@ -180,7 +180,7 @@ const CustomNodeFlow = () => {
                 _nodes.push({
                     id: `${c * 10 + r}`,
                     type: 'card',
-                    data: { c: c, r: r },
+                    data: { c: c, r: r, imgIdx: 0 },
                     position: { x: c * 140, y: r * 160 },
                     sourcePosition: 'left',
                 })
@@ -230,6 +230,7 @@ const CustomNodeFlow = () => {
                 node.data = {
                     ...node.data,
                     flip: map[node.data.r][node.data.c] !== 0,
+                    imgIdx: map[node.data.r][node.data.c]
                 };
 
                 return node;

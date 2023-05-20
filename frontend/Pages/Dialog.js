@@ -29,7 +29,6 @@ const Image = styled.img`
     height: 100px;
     margin-top: 28px;
     margin-bottom: 16px;
-    background-color: red;
 `;
 
 export function Dialog({ title, description, imgSrc, onClickButton, buttonMsg }) {
