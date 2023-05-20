@@ -160,10 +160,10 @@ export function Card({ data, isConnectable }) {
         <CardInner>
             <CardFront>
                 <CardFrontImg src={cardImgPath["cardImg_" + imgIdx]} />
-                <CardLevelContainer>
+                {/* <CardLevelContainer>
                     <CardLevel />
                     <CardLevel />
-                </CardLevelContainer>
+                </CardLevelContainer> */}
             </CardFront>
             <CardBack>
             </CardBack>
