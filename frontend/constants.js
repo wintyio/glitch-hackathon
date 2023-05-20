@@ -1,0 +1,1 @@
+export const CONTRACT_ADDRESS = 'glitch-hackathon-project.winty.testnet';
