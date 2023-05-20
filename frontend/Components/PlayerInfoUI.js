@@ -1,9 +1,8 @@
 
 
-export function PlayerInfoUI(props) {
+export function PlayerInfoUI({ accountId, point }) {
     return <div>
-        <span>{props.playerInfo.accountId}</span>
-        <span>{props.playerInfo.score}</span>
-        {props.playerInfo.isMe && <span>나야</span>}
+        <span>{accountId}</span>
+        <span>{point}</span>
     </div>
 }

@@ -1,7 +1,7 @@
 import { Card } from "../Components/Card";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addPlayerInfo, selectPlayerInfo, updateMap } from "../slices/gameInfo";
+import { addPlayerInfo, selectPlayerInfo, selectPoints, updateMap, updatePoints } from "../slices/gameInfo";
 import { PlayerInfo } from "../classes/PlayerInfo";
 import { PlayerInfoUI } from "../Components/PlayerInfoUI";
 import { CardBoard } from "../Components/CardBoard";
@@ -11,40 +11,56 @@ function rand(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-window.gWebSocket = null;
+// window.gWebSocket = null;
 window.gRoomId = null;
 
 export function GamePage({ isSignedIn, contractId, wallet }) {
     const [gameState, setGameState] = useState("Wait");
     const [roomId, setRoomId] = useState();
 
-    const webSocket = new WebSocket("ws://3.39.230.181:8787/start");
-    window.gWebSocket = webSocket;
-
     useEffect(() => {
+        window.gWebSocket = new WebSocket("ws://3.39.230.181:8787/start");
+
         // 2. 웹소켓 이벤트 처리
         // 2-1) 연결 이벤트 처리
-        webSocket.onopen = () => {
+        window.gWebSocket.onopen = () => {
             console.log("웹소켓서버와 연결 성공");
-            let data = { type: "ENTER", accountId: "asdf.adsf" };
-            webSocket.send(JSON.stringify(data));
+            let data = { type: "ENTER", accountId: wallet.accountId };
+            window.gWebSocket.send(JSON.stringify(data));
         };
 
         // 2-2) 메세지 수신 이벤트 처리
-        webSocket.onmessage = function (event) {
+        window.gWebSocket.onmessage = function (event) {
             let data = JSON.parse(event.data);
             let type = data.type;
-            console.log(type);
+            let points = {};
             switch (type) {
+                case "READY":
+                    points = {};
+                    data.names.map(v => { points[`${v}`] = 0; });
+                    dispatch(updatePoints(points));
+                    break;
+
                 case "START":
                     let roomId = data.roomId;
                     setGameState("Start");
                     setRoomId(roomId);
                     window.gRoomId = roomId;
+                    window.gAccountId = wallet.accountId;
+                    points = {};
+                    data.names.map(v => { points[`${v}`] = 0; });
+                    dispatch(updatePoints(points));
                     break;
 
                 case "MAP":
                     dispatch(updateMap(data.map));
+                    break;
+
+                case "POINT":
+                    console.log(data.points);
+                    dispatch(updatePoints(data.points));
+                    break;
+
                 default:
                     break;
             }
@@ -53,12 +69,12 @@ export function GamePage({ isSignedIn, contractId, wallet }) {
         }
 
         // 2-3) 연결 종료 이벤트 처리
-        webSocket.onclose = function () {
+        window.gWebSocket.onclose = function () {
             console.log("서버 웹소켓 연결 종료");
         }
 
         // 2-4) 에러 발생 이벤트 처리
-        webSocket.onerror = function (event) {
+        window.gWebSocket.onerror = function (event) {
             console.log(event)
         }
 
@@ -68,7 +84,7 @@ export function GamePage({ isSignedIn, contractId, wallet }) {
         /*
         document.getElementById("btn_send").onclick = function () {
 
-            if (webSocket.readyState === webSocket.OPEN) { // 연결 상태 확인
+            if (window.gWebSocket.readyState === webSocket.OPEN) { // 연결 상태 확인
                 webSocket.send(`증가하는 숫자를 보냅니다 => ${count}`); // 웹소켓 서버에게 메시지 전송
                 count++; // 보낼때마다 숫자를 1씩 증가
 
@@ -98,6 +114,7 @@ export function GamePage({ isSignedIn, contractId, wallet }) {
 
     const playerInfo = useSelector(selectPlayerInfo);
     const dispatch = useDispatch();
+    const points = useSelector(selectPoints);
 
     if (gameState === "Wait") return <RoomPage />;
 
@@ -113,7 +130,7 @@ export function GamePage({ isSignedIn, contractId, wallet }) {
         }}>플레이어 추가</button>
 
         <div>
-            {playerInfo.map(val => <PlayerInfoUI playerInfo={val} />)}
+            {Object.keys(points).map(k => <PlayerInfoUI accountId={k} point={points[k]} />)}
         </div>
     </div>;
 }

@@ -7,7 +7,7 @@ const CardInner = styled.div`
     width: 100%;
     height: 100%;
     text-align: center;
-    transition: transform 0.8s;
+    transition: transform 0.5s;
     transform-style: preserve-3d;
 `;
 
@@ -80,12 +80,13 @@ export function Card({ data, isConnectable }) {
     const [flip, setFlip] = useState(false);
 
     const onClick = () => {
+        console.log("asad");
         if (flip) return;
-        let sendData = { roomId: gRoomId, type: "OPEN", c: data.c, r: data.r }
+        let sendData = { roomId: gRoomId, type: "OPEN", c: data.c, r: data.r, accountId: window.gAccountId }
         window.gWebSocket.send(JSON.stringify(sendData));
     }
 
-    return <CardContainer className={data.flip ? "flip" : ""} onClick={onClick} onDrag={e => e.preventDefault()}>
+    return <CardContainer className={data.flip ? "flip" : ""} onClick={onClick} /* onDrag={e => { e.preventDefault(); return false; }}*/>
         <CardInner>
             <CardFront>
                 <CardFrontImg />

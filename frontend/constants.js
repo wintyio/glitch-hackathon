@@ -4,7 +4,9 @@ export const CONTRACT_ADDRESS = 'glitch-hackathon-project.winty.testnet';
 
 const color = {
     primary: "#EF586B",
-    black: "#222222"
+    black: "#222222",
+    disabled: "#E2E2E2",
+    gray1: "#585858"
 }
 
 const style = {
@@ -26,7 +28,22 @@ const style = {
         font-size: 36px;
         line-height: 44px;
         text-transform: capitalize;
-        color: #000000;
+    `,
+    SubTitle: styled.div`
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 24px;
+        line-height: 29px;
+        color: ${color.gray1};
+    `,
+    Caption: styled.div`
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 11px;
+        line-height: 13px;
+        color: ${color.gray1};
     `
 }
 
