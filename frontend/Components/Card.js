@@ -12,11 +12,13 @@ const CardInner = styled.div`
 `;
 
 const CardContainer = styled.div`
+    position: static;
     background-color: transparent;
     min-width: 108px;
     width: 108px;
     height: 141px;
     margin: 7px 6.5px;
+    border-radius: 10px;
     perspective: 1000px; /* Remove this if you don't want the 3D effect */
     transition: box-shadow .2s ease-in-out,transform .2s ease-in-out;
     cursor: pointer;
@@ -24,7 +26,7 @@ const CardContainer = styled.div`
         transform: rotateY(180deg);
     }
     &:hover:not(.flip) {
-        transform: translateY(-0.1rem);
+        transform: translateY(-0.1rem) scale(1.04);
         box-shadow: 0 0.1rem 0.2rem rgba(34,34,34,.05), 0 0.4rem 1.6rem rgba(34,34,34,.15);
     }
 `;
@@ -83,7 +85,7 @@ export function Card() {
         setFlip(true);
     }
 
-    return <CardContainer className={flip ? "flip" : ""} onClick={onClick}>
+    return <CardContainer className={flip ? "flip" : ""} onClick={onClick} onDrag={e => e.preventDefault()}>
         <CardInner>
             <CardFront>
                 <CardFrontImg />
@@ -95,5 +97,5 @@ export function Card() {
             <CardBack>
             </CardBack>
         </CardInner>
-    </CardContainer>;
+    </CardContainer >;
 }

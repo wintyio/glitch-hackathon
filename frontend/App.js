@@ -1,5 +1,5 @@
 import 'regenerator-runtime/runtime';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import './assets/global.css';
 
@@ -8,12 +8,17 @@ import { EducationalText, SignInPrompt, SignOutButton } from './ui-components';
 import { Contract } from './near-interface';
 import { CONTRACT_ADDRESS } from './constants';
 
+import { GamePage } from './Pages/GamePage';
+import { RoomPage } from './Pages/RoomPage';
 import { MainPage } from './Pages/MainPage';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 
 export default function App({ isSignedIn, contractId, wallet }) {
   const [valueFromBlockchain, setValueFromBlockchain] = React.useState();
 
   const [uiPleaseWait, setUiPleaseWait] = React.useState(true);
+
+  const [page, setPage] = useState("main");
 
   const contract = new Contract({ contractId: CONTRACT_ADDRESS, walletToUse: wallet });
 
@@ -65,7 +70,16 @@ export default function App({ isSignedIn, contractId, wallet }) {
 
   return (
     <div>
-      <MainPage isSignedIn={isSignedIn} contractId={contractId} wallet={wallet} />
+      <HashRouter>
+        <Routes>
+          <Route exact path='/' element={<MainPage isSignedIn={isSignedIn} contractId={contractId} wallet={wallet} />} />
+          <Route path='/room' element={<RoomPage isSignedIn={isSignedIn} contractId={contractId} wallet={wallet} />} />
+          <Route path='/game' element={<GamePage isSignedIn={isSignedIn} contractId={contractId} wallet={wallet} />} />
+        </Routes>
+        {/* {!isSignedIn && <LoginPage />} */}
+        {/* <RoomPage /> */}
+        {/* <GamePage isSignedIn={isSignedIn} contractId={contractId} wallet={wallet} /> */}
+      </HashRouter>
     </div>
   );
 }
