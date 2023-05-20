@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { theme } from "../constants";
 
 const CardInner = styled.div`
     position: relative;
@@ -12,10 +13,10 @@ const CardInner = styled.div`
 
 const CardContainer = styled.div`
     background-color: transparent;
-    min-width: 40px;
-    width: 40px;
-    height: 70px;
-    margin: 3px;
+    min-width: 108px;
+    width: 108px;
+    height: 141px;
+    margin: 7px 6.5px;
     perspective: 1000px; /* Remove this if you don't want the 3D effect */
     transition: box-shadow .2s ease-in-out,transform .2s ease-in-out;
     cursor: pointer;
@@ -30,23 +31,48 @@ const CardContainer = styled.div`
 
 const CardSide = styled.div`
     position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
     height: 100%;
     border-radius: 10px;
+    box-shadow: 0px 4px 20px 5px rgba(0, 0, 0, 0.05);
     -webkit-backface-visibility: hidden; /* Safari */
     backface-visibility: hidden;
 `;
 
-const CardFront = styled(CardSide)`
+const CardBack = styled(CardSide)`
     background-color: #bbb;
     color: black;
 `;
 
-const CardBack = styled(CardSide)`
-    background-color: dodgerblue;
+const CardFront = styled(CardSide)`
+    background-color: white;
     color: white;
     transform: rotateY(180deg);
 `;
+
+const CardFrontImg = styled.img`
+    width: 100px;
+    height: 100px;
+    margin-top: 14px;
+    margin-bottom: 12px;
+    background-color: saddlebrown;
+`;
+
+const CardLevelContainer = styled.div`
+    display: flex;
+    gap: 4px;
+`;
+
+const CardLevel = styled.div`
+    width: 16px;
+    height: 4px;
+    border-radius: 10px;
+    background-color: ${theme.color.primary};
+`;
+
 
 export function Card() {
     const [flip, setFlip] = useState(false);
@@ -59,8 +85,15 @@ export function Card() {
 
     return <CardContainer className={flip ? "flip" : ""} onClick={onClick}>
         <CardInner>
-            <CardFront></CardFront>
-            <CardBack></CardBack>
+            <CardFront>
+                <CardFrontImg />
+                <CardLevelContainer>
+                    <CardLevel />
+                    <CardLevel />
+                </CardLevelContainer>
+            </CardFront>
+            <CardBack>
+            </CardBack>
         </CardInner>
     </CardContainer>;
 }

@@ -1,3 +1,5 @@
+
+
 export function PlayerInfoUI(props) {
     return <div>
         <span>{props.playerInfo.accountId}</span>

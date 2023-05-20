@@ -76,7 +76,7 @@ export function MainPage({ isSignedIn, contractId, wallet }) {
     const dispatch = useDispatch();
 
     return <div>
-        <CardBoard row={20} col={20} />
+        <CardBoard row={4} col={8} />
 
         <SignButton />
 
@@ -88,8 +88,5 @@ export function MainPage({ isSignedIn, contractId, wallet }) {
         <div>
             {playerInfo.map(val => <PlayerInfoUI playerInfo={val} />)}
         </div>
-
-
-
     </div>;
 }
