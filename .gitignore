@@ -9,6 +9,10 @@ node_modules
 /out
 /dist
 
+/frontend/dist
+/frontend/.parcel-cache
+/contract/build
+
 # keys
 /templates/react/neardev
 
