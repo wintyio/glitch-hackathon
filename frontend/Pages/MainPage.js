@@ -33,7 +33,7 @@ export function MainPage({ isSignedIn, contractId, wallet, contract }) {
         let donate = searchParam("transactionHashes");
         if (!donate) return;
         localStorage.setItem("goGame", "true");
-        location.href = "/";
+        location.href = "./";
     }, []);
 
     return <div>

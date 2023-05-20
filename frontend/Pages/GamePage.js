@@ -60,7 +60,7 @@ export function GamePage({ isSignedIn, contractId, wallet }) {
 
     useEffect(() => {
         if (localStorage.getItem("goGame") !== "true") {
-            location.href = "/";
+            location.href = "./";
         }
         else
             localStorage.setItem("goGame", "false");
