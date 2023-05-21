@@ -5,6 +5,7 @@ import gameImg from "../img/card_4.png";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import backgroundImg from "../img/background.png";
+import axios from "axios";
 
 function searchParam(key) {
     return new URLSearchParams(window.location.search).get(key);
@@ -32,8 +33,25 @@ const Title = styled.div`
     margin-bottom: 40px;
 `;
 
+export const getNearTokenByAccountId = async (accountId) => {
+    let res = await axios.post('https://rpc.testnet.near.org', {
+        "jsonrpc": "2.0",
+        "id": "dontcare",
+        "method": "query",
+        "params": {
+            "request_type": "view_account",
+            "finality": "final",
+            "account_id": accountId
+        }
+    });
+
+    let result = BigInt(res.data.result.amount) / BigInt("100000000000000000000000");
+    return parseInt(result.toLocaleString()) / 10;
+}
+
 export function MainPage({ isSignedIn, contractId, wallet, contract }) {
     const [openSignDodal, setOpenSignDodal] = useState(false);
+    const [nearToken, setNearToken] = useState("0");
 
     const navigate = useNavigate();
     const signIn = () => {
@@ -50,6 +68,11 @@ export function MainPage({ isSignedIn, contractId, wallet, contract }) {
     }
 
     useEffect(() => {
+        getNearTokenByAccountId(wallet.accountId).then(val => setNearToken(val));
+        setInterval(() => {
+            getNearTokenByAccountId(wallet.accountId).then(val => setNearToken(val));
+        }, 10000);
+
         if (localStorage.getItem("goGame") === "true") {
             return navigate("/game");
         }
@@ -69,11 +92,12 @@ export function MainPage({ isSignedIn, contractId, wallet, contract }) {
             onClickButton={signIn} />}
 
         <div style={{ position: "absolute", top: 32, right: 32 }}>
-            <span style={{ marginRight: 20 }}>{isSignedIn ? wallet.accountId : ""}</span>
+            <span style={{ marginRight: 10 }}>{isSignedIn ? wallet.accountId : ""}</span>
+            <span style={{ marginRight: 20 }}>{nearToken}Ⓝ</span>
             <theme.style.DefaultButton onClick={signIn}>{isSignedIn ? "SignOut" : "SignIn"}</theme.style.DefaultButton>
         </div>
 
         <Title>Flip<br />Dash</Title>
-        <theme.style.DefaultButton onClick={onClickPlayButton}>Play -1 NEAR</theme.style.DefaultButton>
+        <theme.style.DefaultButton onClick={onClickPlayButton}>Play -1 Ⓝ</theme.style.DefaultButton>
     </Root>
 }

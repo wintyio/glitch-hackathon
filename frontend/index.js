@@ -7,6 +7,7 @@ import { Wallet } from './near-wallet';
 import { CONTRACT_ADDRESS } from './constants';
 import { Provider } from 'react-redux';
 import store from './store/store';
+import axios from 'axios';
 
 // When creating the wallet you can optionally ask to create an access key
 // Having the key enables to call non-payable methods without interrupting the user to sign

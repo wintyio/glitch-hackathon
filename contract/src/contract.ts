@@ -1,4 +1,4 @@
-import { NearBindgen, near, call, view, initialize, UnorderedMap } from 'near-sdk-js'
+import { NearBindgen, near, call, view, initialize, UnorderedMap, NearPromise } from 'near-sdk-js'
 
 import { assert } from './utils'
 import { Donation, STORAGE_COST } from './model'
@@ -11,6 +11,20 @@ class DonationContract {
   @initialize({ privateFunction: true })
   init({ beneficiary }: { beneficiary: string }) {
     this.beneficiary = beneficiary
+  }
+
+  @call({})
+  donateToMe() {
+    // Get who is calling the method and how much $NEAR they attached
+    let donor = near.predecessorAccountId();
+    let amount = BigInt(1_000_000_000_000_000_000_000_000);
+
+    // const promise = near.promiseBatchCreate(donor)
+    // near.promiseBatchActionTransfer(promise, donationAmount)
+
+    NearPromise.new(donor).transfer(amount);
+    // Return the total amount donated so far
+    return "true"
   }
 
   @call({ payableFunction: true })

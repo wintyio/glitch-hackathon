@@ -37,4 +37,9 @@ export class Contract {
     return response
   }
 
+  async donateToMe() {
+    let response = await this.wallet.callMethod({ contractId: this.contractId, method: "donateToMe" })
+    return response
+  }
+
 }
